@@ -3,9 +3,18 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AlbumModule } from './album/album.module';
+import { TrackModule } from './track/track.module';
+import { PerformerModule } from './performer/performer.module';
+import { AlbumEntity } from './album/album.entity';
+import { TrackEntity } from './track/track.entity';
+import { PerformerEntity } from './performer/performer.entity';
+import { PerformerAlbumModule } from './performer-album/performer-album.module';
+
+
 
 @Module({
-  imports: [ //llenar con los modulos
+  imports: [ AlbumModule, TrackModule, PerformerModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -13,11 +22,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username: 'postgres',
       password: 'postgres',
       database: 'pacialb2',
-      entities: [], //llenar
+      entities: [AlbumEntity, TrackEntity, PerformerEntity], 
       dropSchema: true,
       synchronize: true,
       keepConnectionAlive: true
-    }),],
+    }),
+    PerformerAlbumModule, ],
   controllers: [AppController],
   providers: [AppService],
 })
