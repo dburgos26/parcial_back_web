@@ -71,6 +71,6 @@ describe('AlbumService', () => {
       tracks: [],
       performers: []
     }
-    await expect(() => service.create(album)).rejects.toHaveProperty('La descripción no puede estar vacía');
+    await expect(() => service.create(album)).rejects.toHaveProperty('message','La descripción no puede estar vacía');
   });
 });
