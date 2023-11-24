@@ -40,7 +40,6 @@ describe('AlbumService', () => {
     expect(service).toBeDefined();
   });
 
-  // create test
   it('should create an album', async () => {
     const album = {
       id:"",
@@ -62,7 +61,6 @@ describe('AlbumService', () => {
     expect(storedAlbum.descripcion).toEqual(album.descripcion);
   });
 
-  // create test empty description error
   it('should throw an error when creating an album with empty description', async () => {
     const album = {
       id:"",
