@@ -28,7 +28,7 @@ describe('AlbumService', () => {
     for(let i = 0; i < 5; i++){
       const album = await repository.save({
         nombre: faker.lorem.sentence(),
-        fecha_lanzamiento: new Date(),
+        fecha_lanzamiento: faker.date.past(),
         caratula: faker.image.url(),
         descripcion: faker.lorem.sentence()
       });
@@ -44,7 +44,7 @@ describe('AlbumService', () => {
     const album = {
       id:"",
       nombre: faker.lorem.sentence(),
-      fecha_lanzamiento: new Date(),
+      fecha_lanzamiento: faker.date.past(),
       caratula: faker.image.url(),
       descripcion: faker.lorem.sentence(),
       tracks: [],
@@ -65,7 +65,7 @@ describe('AlbumService', () => {
     const album = {
       id:"",
       nombre: faker.lorem.sentence(),
-      fecha_lanzamiento: new Date(),
+      fecha_lanzamiento: faker.date.past(),
       caratula: faker.image.url(),
       descripcion: "",
       tracks: [],
@@ -73,4 +73,49 @@ describe('AlbumService', () => {
     }
     await expect(() => service.create(album)).rejects.toHaveProperty('message','La descripción no puede estar vacía');
   });
+
+  it('should throw an error when creating an album with empty name', async () => {
+    const album = {
+      id:"",
+      nombre: "",
+      fecha_lanzamiento: faker.date.past(),
+      caratula: faker.image.url(),
+      descripcion: faker.lorem.sentence(),
+      tracks: [],
+      performers: []
+    }
+    await expect(() => service.create(album)).rejects.toHaveProperty('message','El nombre no puede estar vacío');
+  });
+
+  it('should return a list of albums', async () => {
+    const albums = await service.findAll();
+    expect(albums).not.toBeNull();
+    expect(albums.length).toEqual(albumList.length);
+  });
+
+  it('should return an album', async () => {
+    const album = await service.findOne(albumList[0].id);
+    expect(album).not.toBeNull();
+    expect(album.id).toEqual(albumList[0].id);
+    expect(album.nombre).toEqual(albumList[0].nombre);
+    expect(album.fecha_lanzamiento).toEqual(albumList[0].fecha_lanzamiento);
+    expect(album.caratula).toEqual(albumList[0].caratula);
+    expect(album.descripcion).toEqual(albumList[0].descripcion);
+  });
+
+  it('should throw an error when album is not found', async () => {
+    await expect(() => service.findOne("0")).rejects.toHaveProperty('message','El album no existe');
+  });
+
+  it('should delete an album', async () => {
+    const album = albumList[0];
+    await service.delete(album.id);
+    const storedAlbum = await repository.findOne({where: {id: album.id}});
+    expect(storedAlbum).toBeNull();
+  });
+
+  it('should throw an error when album is not found', async () => {
+    await expect(() => service.delete("0")).rejects.toHaveProperty('message','El album no existe');
+  });
+
 });

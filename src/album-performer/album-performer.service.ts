@@ -5,9 +5,8 @@ import { PerformerEntity } from '../performer/performer.entity';
 import { Repository } from 'typeorm';
 import { BusinessError, BusinessLogicException } from '../shared/errors/business-errors';
 
-
 @Injectable()
-export class PerformerAlbumService {
+export class AlbumPerformerService {
 
     constructor(
         @InjectRepository(PerformerEntity)
@@ -31,10 +30,13 @@ export class PerformerAlbumService {
         if (!performer) {
             throw new BusinessLogicException(this.PERFORMER_NOT_FOUND, BusinessError.NOT_FOUND);
         }
+        if (album.performers === undefined) {
+            album.performers = [];
+        }
         if (album.performers.length >= this.MAX_PERFORMERS) {
             throw new BusinessLogicException(this.MAX_PERFORMERS_ERROR, BusinessError.BAD_REQUEST);
         }
-        performer.albums = [...performer.albums, album];
+        album.performers.push(performer);
         return await this.albumRepository.save(album);
     }
 

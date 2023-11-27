@@ -9,7 +9,7 @@ import { PerformerModule } from './performer/performer.module';
 import { AlbumEntity } from './album/album.entity';
 import { TrackEntity } from './track/track.entity';
 import { PerformerEntity } from './performer/performer.entity';
-import { PerformerAlbumModule } from './performer-album/performer-album.module';
+import { AlbumPerformerModule } from './album-performer/album-performer.module';
 
 
 
@@ -27,7 +27,7 @@ import { PerformerAlbumModule } from './performer-album/performer-album.module';
       synchronize: true,
       keepConnectionAlive: true
     }),
-    PerformerAlbumModule, ],
+    AlbumPerformerModule, ],
   controllers: [AppController],
   providers: [AppService],
 })

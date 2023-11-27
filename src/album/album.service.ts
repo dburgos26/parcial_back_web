@@ -18,11 +18,11 @@ export class AlbumService {
     ALBUM_NOT_FOUND = 'El album no existe';
 
     async findAll(): Promise<AlbumEntity[]> {
-        return await this.albumRepository.find({ relations: ['track', 'performer'] });
+        return await this.albumRepository.find({ relations: ['tracks', 'performers'] });
     }
 
     async findOne(id: string): Promise<AlbumEntity> {
-        const album = await this.albumRepository.findOne({where:{id}, relations: ['track', 'performer'] });
+        const album = await this.albumRepository.findOne({where:{id}, relations: ['tracks', 'performers'] });
         if (!album) {
             throw new BusinessLogicException(this.ALBUM_NOT_FOUND, BusinessError.NOT_FOUND);
         }
@@ -43,6 +43,11 @@ export class AlbumService {
         const album = await this.albumRepository.findOne({where:{id}});
         if (!album) {
             throw new BusinessLogicException(this.ALBUM_NOT_FOUND, BusinessError.NOT_FOUND);
+        }
+        if (album.tracks !== undefined){
+            if(album.tracks.length > 0){
+                throw new BusinessLogicException('El album tiene tracks asociados', BusinessError.BAD_REQUEST);
+            }
         }
         return await this.albumRepository.delete(album);
     }

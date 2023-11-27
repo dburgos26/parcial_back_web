@@ -14,16 +14,16 @@ export class PerformerService {
 
     MAX_DESCRIPTION_LENGTH = 100;
     MAX_DESCRIPTION_LENGTH_ERROR = 'La descripción no puede superar los 100 caracteres';
-    ALBUM_NOT_FOUND = 'El album no existe';
+    PERFORMER_NOT_FOUND = 'El performer no existe';
 
     async findAll(): Promise<PerformerEntity[]> {
-        return await this.performerRepository.find({ relations: ['album'] });
+        return await this.performerRepository.find({ relations: ['albums'] });
     }
 
     async findOne(id: string): Promise<PerformerEntity> {
-        const performer = await this.performerRepository.findOne({ where: { id }, relations: ['album'] });
+        const performer = await this.performerRepository.findOne({ where: { id }, relations: ['albums'] });
         if (!performer) {
-            throw new BusinessLogicException(this.ALBUM_NOT_FOUND, BusinessError.NOT_FOUND);
+            throw new BusinessLogicException(this.PERFORMER_NOT_FOUND, BusinessError.NOT_FOUND);
         }
         return performer;
     }
